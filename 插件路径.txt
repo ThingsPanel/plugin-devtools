@@ -1,0 +1,4 @@
+
+
+插件js文件存放目录：./ThingsPanel-Go/extensions/"插件名"/view/"xxx.js"
+插件配置文件存放目录：./ThingsPanel-Go/extensions/"插件名"/config.yaml

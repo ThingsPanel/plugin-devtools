@@ -1,0 +1,17 @@
+1-点击设置按钮填写
+Host(ip:port)
+Protocol(mqtt/tcp)
+Username(guest)
+Password(guest)
+如图《设置》
+
+2-点击Add publisher按钮添加mqtt发布客户端
+Topic to publish（thingspanel.telemetry）
+Payload（填写推送的数据）
+
+3-点击Add subscriber按钮添加mqtt消息订阅客户端
+Topic to subscribe（thingspanel.telemetry）
+
+4-点击按钮subscriber可收到平台订阅消息
+
+5-点击按钮publisher可向平台发送消息
