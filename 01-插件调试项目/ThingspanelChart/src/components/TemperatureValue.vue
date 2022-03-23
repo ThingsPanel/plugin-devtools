@@ -2,13 +2,30 @@
   <!-- <div class="chart-all"> -->
   <div style="width: 100%; height: 100%">
     <div class="chart-top">
-      <div style="color: #fff; margin-top: 10px">甲醛浓度</div>
-      <div style="color: #5b92ff">Formaldehyde concentration</div>
+      <br>
+      <div style="color:#fff;">实时温度</div>
+      <div style="color:#5B92FF">temperature</div>
     </div>
-    <div class="chart-body" :id="'chart_' + id">
+    <div class="chart-body">
+      <div class="chart-title">
+        <countTo :startVal='startVal' :endVal='endVal' :duration='duration'></countTo>
+        <!-- <div class="chart-temperature">36</div> -->
+        <div class="chart-describe" style="text-align: center;">当前温度 &#176;C</div>
+      </div>
+      <img class="chart-img1" src="../assets/5.png" alt="">
+      <img class="chart-img" src="../assets/2.png" alt="">
     </div>
     <div class="chart-bottom">
-      <img class="chart-img" src="http://dev.thingspanel.cn/extensions/formaldehyde/view/组 1 拷贝.png" alt="">
+      <div class="ordie">
+        <div>
+          <img class="chart-img2" src="../assets/4.png" alt="">
+          
+        </div>
+        <div class="info">
+          <div>当前温度偏高，请调试温度！</div>
+          <!-- <div style="color: #5B92FF;font-size: 12px;margin-top: 5px;">The current temperature is too high. Adjust the temperature</div>          -->
+        </div>
+      </div>
     </div>
 
   </div>
@@ -16,7 +33,9 @@
 </template>
 <script>
   import * as echarts from "echarts";
+  import countTo from 'vue-count-to';
   export default {
+    components: { countTo },
     props: {
       id: {
         type: Number,
@@ -39,7 +58,13 @@
         latest: {},
         fields: [],
         chart: null,
-        formaldehyde: 0
+        formaldehyde: 0,
+        // 需要滚动的时间
+        duration: 5000,
+        // 初始值
+        startVal: 0,
+        // 最终值
+        endVal: 36
       };
     },
     watch: {
@@ -90,8 +115,8 @@
           }
         },
       },
-      colorStart() {},
-      colorEnd() {},
+      colorStart() { },
+      colorEnd() { },
       legend(val, oldVal) {
         this.chart.setOption({
           legend: {
@@ -210,33 +235,91 @@
   .chart-top {
     width: 100%;
     height: 10%;
-    position: absolute;
-    top: 46px;
-    left: 22px;
-    /* border: 1px solid rgb(187, 46, 46); */
+    
+    /* position: absolute;
+    top: 20px;
+    left: 22px; */
+    border: 1px solid rgb(187, 46, 46);
   }
 
   .chart-body {
     /* margin: 5%; */
     width: 100%;
-    height: 90%;
-    /* border: 1px solid rgb(23, 173, 60); */
+    height: 57%;
+    border: 1px solid rgb(34, 24, 26);
+    text-align: center;
+  }
+
+  .chart-title {
+   
+    font-size: 60px;
+    width: 100%;
+    height: 57%;
+    font-weight: bold;
+    color: #fff;
+    position: absolute;
+    top: -20%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    
+    margin: auto;
+    /* border: 1px solid rgb(23, 105, 173); */
+    z-index: 10;
+  }
+  .chart-temperature{
+    /* border: 1px solid rgb(1, 14, 24); */
+    /* margin-top: 25%; */
+    max-width: 80%;
+    max-height: 80%;
+    /* width: 100%; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    /* border: 1px solid rgb(233, 53, 8); */
+    
+  }
+  .chart-describe {
+    margin-top: -10px;
+    font-size: 10px;
+    color: #fff;
+    font-weight: 400;
+    /* width: 100%;
+    height: 90%; */
+    text-align: center;
+    z-index: 1;
+    /* border: 1px solid rgb(23, 173, 115); */
+
   }
 
   .chart-bottom {
     position: relative;
-    top: -90%;
+    top: 5%;
     width: 100%;
-    height: 90%;
-    /* border: 1px solid rgb(155, 211, 25); */
+    height: 20%;
+    /* border: 1px solid rgb(233, 53, 8); */
   }
-
   .chart-img {
+    max-width: 80%;
+    max-height: 80%;
+    /* width: 100%; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    /* border: 1px solid rgb(233, 53, 8); */
+  }
+  .chart-img1 {
     max-width: 60%;
     max-height: 60%;
     /* width: 100%; */
     position: absolute;
-    top: 0;
+    top: 15%;
     left: 0;
     bottom: 0;
     right: 0;
@@ -245,4 +328,28 @@
 
     /* margin-top: -165px; */
   }
+  .ordie{
+	display:flex;
+	align-items:center;
+	padding:2px;
+	max-width:90%;
+  height:65%;
+	margin:auto;
+	background-color:#1B2554;
+	border-radius:50px;
+ 
+	}
+  .chart-img2 {
+    max-width: 100%;
+    max-height: 100%;
+    
+  }
+	.ordie .info{
+	margin-left:8px;
+  margin-top: 0px;
+  line-height: 15px;
+	}
+	.info div:nth-child(1){
+	color:#fff;
+	}
 </style>

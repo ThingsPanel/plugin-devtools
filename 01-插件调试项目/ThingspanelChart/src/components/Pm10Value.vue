@@ -1,18 +1,13 @@
 <template>
-  <!-- <div class="chart-all"> -->
-  <div style="width: 100%; height: 100%">
+  <div class="chart-all">
     <div class="chart-top">
-      <div style="color: #fff; margin-top: 10px">甲醛浓度</div>
-      <div style="color: #5b92ff">Formaldehyde concentration</div>
+      <div style="color: #fff; margin-top: 10px">当前PM2.5</div>
+      <div style="color: #5b92ff">Current PM2.5</div>
     </div>
+    <!-- <div class="chart-bottom">0.032</div> -->
     <div class="chart-body" :id="'chart_' + id">
     </div>
-    <div class="chart-bottom">
-      <img class="chart-img" src="http://dev.thingspanel.cn/extensions/formaldehyde/view/组 1 拷贝.png" alt="">
-    </div>
-
   </div>
-  <!-- </div> -->
 </template>
 <script>
   import * as echarts from "echarts";
@@ -90,8 +85,8 @@
           }
         },
       },
-      colorStart() {},
-      colorEnd() {},
+      colorStart() { },
+      colorEnd() { },
       legend(val, oldVal) {
         this.chart.setOption({
           legend: {
@@ -110,6 +105,14 @@
     },
     methods: {
       getData() {
+        var myDate = new Date();
+        var now = myDate.valueOf();
+        var time = new Date(value).valueOf();
+        if (now > time) {
+          return true;
+        } else {
+          return false;
+        }
         this.formaldehyde = this.latest.formaldehyde
         this.initChart();
         // setTimeout(() => {
@@ -123,69 +126,86 @@
         var option;
         //option为数据模板
         option = {
-          series: [{
-            type: 'gauge',
-            min: 0,
-            max: 0.1,
-            progress: {
-              show: true,
-              width: 10
-              // color:'#3ECF63'
-            },
-            itemStyle: {
-              color: '#3ECF63'
-            },
-            pointer: {
-              show: false
-            },
-            axisLine: {
-              lineStyle: {
-                width: 10
-              }
-            },
-            axisTick: {
-              show: false
-            },
-            splitLine: {
-              length: 15,
-              lineStyle: {
-                width: 0,
-                // color: '#999'
-              }
-            },
+          title: {
+            text: ''
+          },
+          legend: {
+            data: []
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          grid: {
+            containLabel: true,
+            top: '100px',
+            left: 0,
+            bottom: '10px',
+          },
+          yAxis: {
+            data: [],
+            inverse: true,
+            axisLine: { show: false },
+            axisTick: { show: false },
             axisLabel: {
-              distance: 25,
-              color: '#999',
-              fontSize: 0
+              margin: 0,
+              fontSize: 14,
             },
-            // anchor: {
-            //   show: false,
-            //   showAbove: false,
-            //   size: 25,
-            //   itemStyle: {
-            //     borderWidth: 10
-            //   }
-            // },
-            title: {
-              show: true,
-              fontSize: 15,
-              color: '#5B92FF',
-              offsetCenter: [0, '15%'],
+            axisPointer: {
+              label: {
+                show: true,
+                margin: 0
+              }
+            }
+          },
+          xAxis: {
+            splitLine: { show: false },
+            axisLabel: { show: false },
+            axisTick: { show: false },
+            axisLine: { show: false }
+          },
+          series: [{
+            itemStyle: {
+              color: '#5D94FE',
             },
-            detail: {
-              valueAnimation: true,
-              width: '80%',
-              lineHeight: 40,
-              borderRadius: 8,
-              offsetCenter: [0, '-10%'],
-              fontSize: 40,
-              fontWeight: 'bolder',
-              formatter: '{value}',
-              color: '#fff'
+            name: '甲醛',
+            type: 'pictorialBar',
+            label: {
+
+              normal: {
+
+                // formatter:'{a} </br>{b}:{c}%',
+                formatter: '{c}{title| μg/m³}',
+                rich: {
+                    title: {
+                      color: '#fff',
+                      fontSize:'20px',
+                      align: 'center'
+                    },
+                  },
+                // color:'#5B92FF',
+                show: true,
+                position: 'left,top',
+                offset: [10, -30],
+                textStyle: {
+                  fontSize: 50,
+                  color: '#fff',
+                  
+                },
+                subtextStyle: {
+                  color: '#aaa'                            // 副标题文字颜色
+                }
+
+              }
             },
+            symbolRepeat: true,
+            symbolSize: ['7%', '50%'],
+            barCategoryGap: '0%',
             data: [{
-              value: this.formaldehyde,
-              name: 'mg/m3'
+              value: 98,
+              symbol: 'roundRect',//'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
             }]
           }]
         };
@@ -207,42 +227,36 @@
   };
 </script>
 <style scoped>
-  .chart-top {
+  .chart-all {
+    /* max-width: 384px; */
     width: 100%;
-    height: 10%;
+    height: 95%;
     position: absolute;
-    top: 46px;
-    left: 22px;
-    /* border: 1px solid rgb(187, 46, 46); */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgb(111, 189, 139);
+  }
+
+  .chart-top {
+    /* text-align: center; */
+    position: absolute;
+    top: 5%;
+    left: 3%;
+    margin: 0 auto;
+    width: 90%;
+    height: 20%;
+    border: 1px solid rgb(187, 46, 46);
   }
 
   .chart-body {
-    /* margin: 5%; */
-    width: 100%;
-    height: 90%;
-    /* border: 1px solid rgb(23, 173, 60); */
-  }
-
-  .chart-bottom {
-    position: relative;
-    top: -90%;
-    width: 100%;
-    height: 90%;
-    /* border: 1px solid rgb(155, 211, 25); */
-  }
-
-  .chart-img {
-    max-width: 60%;
-    max-height: 60%;
-    /* width: 100%; */
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin: auto;
-    /* padding-bottom: 9%; */
-
-    /* margin-top: -165px; */
+    top: 25%;
+    left: 3%;
+    margin: 0 auto;
+    /* margin: 5%; */
+    width: 90%;
+    height: 70%;
+    border: 1px solid rgb(23, 173, 60);
   }
 </style>

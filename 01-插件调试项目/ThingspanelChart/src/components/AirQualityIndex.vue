@@ -1,18 +1,16 @@
 <template>
-  <!-- <div class="chart-all"> -->
+  <!--插件调试区域01-->
   <div style="width: 100%; height: 100%">
     <div class="chart-top">
-      <div style="color: #fff; margin-top: 10px">甲醛浓度</div>
-      <div style="color: #5b92ff">Formaldehyde concentration</div>
+      <div style="color: #fff; margin-top: 10px">二氧化碳值</div>
+      <div style="color: #5b92ff">Carbon dioxide concentration</div>
     </div>
     <div class="chart-body" :id="'chart_' + id">
     </div>
     <div class="chart-bottom">
-      <img class="chart-img" src="http://dev.thingspanel.cn/extensions/formaldehyde/view/组 1 拷贝.png" alt="">
+      <!-- <img class="chart-img" src="../assets/6.png" alt=""> -->
     </div>
-
   </div>
-  <!-- </div> -->
 </template>
 <script>
   import * as echarts from "echarts";
@@ -36,10 +34,11 @@
     },
     data() {
       return {
+        // 插件调试区域02
         latest: {},
         fields: [],
         chart: null,
-        formaldehyde: 0
+        carbon: 0
       };
     },
     watch: {
@@ -103,109 +102,120 @@
     mounted() {
       this.initChart();
       const resizeObserver = new ResizeObserver((entries) => {
-        //回调,重置图表大小
         this.chart && this.chart.resize();
       });
       resizeObserver.observe(document.getElementById("chart_" + this.id));
     },
     methods: {
+      // 插件调试区域03
       getData() {
-        this.formaldehyde = this.latest.formaldehyde
+        this.carbon = this.latest.carbon
         this.initChart();
-        // setTimeout(() => {
-        //   this.initChart();
-        // }, 1000);
       },
       initChart() {
         console.log("---------------------------------初始化图表开始");
         var chartDom = document.getElementById("chart_" + this.id);
         this.chart = echarts.init(chartDom);
         var option;
-        //option为数据模板
         option = {
-          series: [{
-            type: 'gauge',
-            min: 0,
-            max: 0.1,
-            progress: {
-              show: true,
-              width: 10
-              // color:'#3ECF63'
-            },
-            itemStyle: {
-              color: '#3ECF63'
-            },
-            pointer: {
-              show: false
-            },
-            axisLine: {
-              lineStyle: {
-                width: 10
-              }
-            },
-            axisTick: {
-              show: false
-            },
-            splitLine: {
-              length: 15,
-              lineStyle: {
-                width: 0,
-                // color: '#999'
-              }
-            },
-            axisLabel: {
-              distance: 25,
-              color: '#999',
-              fontSize: 0
-            },
-            // anchor: {
-            //   show: false,
-            //   showAbove: false,
-            //   size: 25,
-            //   itemStyle: {
-            //     borderWidth: 10
-            //   }
-            // },
-            title: {
-              show: true,
-              fontSize: 15,
-              color: '#5B92FF',
-              offsetCenter: [0, '15%'],
-            },
-            detail: {
-              valueAnimation: true,
-              width: '80%',
-              lineHeight: 40,
-              borderRadius: 8,
-              offsetCenter: [0, '-10%'],
-              fontSize: 40,
-              fontWeight: 'bolder',
-              formatter: '{value}',
-              color: '#fff'
-            },
-            data: [{
-              value: this.formaldehyde,
-              name: 'mg/m3'
-            }]
-          }]
-        };
+  series: [
+    {
+      type: 'gauge',
+      startAngle: 180,
+      endAngle: 0,
+      min: 0,
+      max: 1,
+      splitNumber:8,
+      axisLine: {
+        lineStyle: {
+          width: 150,
+          color: [
+            [0.17, '#800000'],
+            [0.34, '#B22222'],
+            [0.51, '#FF8C00'],
+            [0.68, '#FFD700'],
+            [0.85, '#ADFF2F'],
+            [1, '#228B22']
+          ]
+        }
+      },
+      pointer: {
+        img:'../assets/7.png',
+        itemStyle: {
+          color: '#fff'
+        }
+      },
+      axisTick: {
+        show: false,
+        length: 12,
+        lineStyle: {
+          color: 'auto',
+          width: 2
+        }
+      },
+      splitLine: {
+        show: false,
+        length: 20,
+        lineStyle: {
+          color: 'auto',
+          width: 5
+        }
+      },
+      axisLabel: {
+        show: false,
+        color: '#fff',
+        fontSize: 20,
+        distance: -60,
+        formatter: function (value) {
+          if (value === 0.875) {
+            return 'A';
+          } else if (value === 0.625) {
+            return 'B';
+          } else if (value === 0.375) {
+            return 'C';
+          } else if (value === 0.125) {
+            return 'D';
+          }
+          else if (value === 0.025) {
+            return 'E';
+          }
+          else if (value === 0) {
+            return 'F';
+          }
+          return '';
+        }
+      },
+      title: {
+        offsetCenter: [0, '-20%'],
+        fontSize: 30
+      },
+      detail: {
+        show: false,
+        fontSize: 50,
+        offsetCenter: [0, '0%'],
+        valueAnimation: true,
+        formatter: function (value) {
+          return Math.round(value * 100) + '分';
+        },
+        color: '#fff'
+      },
+      data: [
+        {
+          value: 3,
+          // name: 'Grade Rating'
+        }
+      ]
+    }
+  ]
+};
         //this.chart.clear();
         this.chart.setOption(option);
-        // window.addEventListener("resize", () => {
-        //   this.chart.resize();
-        // });
         console.log("---------------------------------初始化图表完成");
-      },
-      /**
-       * 重置图表大小
-       */
-      resizeChart() {
-        /* eslint-disable no-unused-expressions */
-        this.chart && this.chart.resize();
       },
     },
   };
 </script>
+<!--插件调试区域04-->
 <style scoped>
   .chart-top {
     width: 100%;
@@ -244,5 +254,8 @@
     /* padding-bottom: 9%; */
 
     /* margin-top: -165px; */
+    /* border: 1px solid rgb(187, 46, 46); */
+
+
   }
 </style>
