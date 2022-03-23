@@ -1,3 +1,4 @@
+MQTTBox-win.exe
 1-点击设置按钮填写
 Host(ip:port)
 Protocol(mqtt/tcp)
